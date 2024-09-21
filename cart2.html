@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .cart-table {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .cart-table img {
+            width: 50px;
+            height: 50px;
+        }
+        .cart-table input {
+            width: 60px;
+            text-align: center;
+        }
+        .cart-table .btn {
+            margin: 0;
+        }
+        .total-price {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .btn-whatsapp {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Cart</h2>
+        <table class="table cart-table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="cart">
+                <!-- Cart items will be added here dynamically -->
+            </tbody>
+        </table>
+        <tfoot>
+            <tr class="total-row">
+                <td colspan="5">Total</td>
+                <td id="total-price">$0.00</td>
+                <td></td>
+            </tr>
+        </tfoot>
+        <button class="btn btn-primary mt-3" onclick="clearCart()">Clear Cart</button>
+        <a href="index.html" class="btn btn-secondary mt-3">Back to Menu</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function loadCart() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartContainer = document.getElementById('cart');
+            const totalPriceElement = document.getElementById('total-price');
+            const whatsappLink = document.getElementById('whatsapp-link');
+            cartContainer.innerHTML = ''; // Clear current cart
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = '<tr><td colspan="6" class="text-center">Your cart is empty.</td></tr>';
+                totalPriceElement.textContent = '0.00';
+                whatsappLink.style.display = 'none'; // Hide WhatsApp button if cart is empty
+                return;
+            }
+
+            let totalPrice = 0;
+            let message = 'Hello, I would like to place an order with the following items:\n\n';
+
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.quantity;
+                totalPrice += subtotal;
+
+                const cartItem = document.createElement('tr');
+                cartItem.innerHTML = `
+                    <td><img src="${item.image}" alt="${item.name}"></td>
+                    <td>${item.name}</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" onclick="updateQuantity(${index}, -1)">-</button>
+                        <input type="number" value="${item.quantity}" min="1" id="quantity-${index}" data-index="${index}">
+                        <button class="btn btn-info btn-sm" onclick="updateQuantity(${index}, 1)">+</button>
+                    </td>
+                    <td>$${subtotal.toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="removeFromCart(${index})">Delete</button>
+                    </td>
+                `;
+                cartContainer.appendChild(cartItem);
+
+                message += `${item.quantity} x ${item.name} - $${subtotal.toFixed(2)}\n`;
+            });
+
+            message += `\nTotal Price: $${totalPrice.toFixed(2)}`;
+            totalPriceElement.textContent = totalPrice.toFixed(2);
+
+            // Update WhatsApp link
+            const phoneNumber = 'YOUR_PHONE_NUMBER'; // Replace with your phone number
+            whatsappLink.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            whatsappLink.style.display = 'inline-block'; // Show WhatsApp button
+        }
+
+        function updateQuantity(index, change) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let item = cart[index];
+            let newQuantity = item.quantity + change;
+
+            if (newQuantity < 1) {
+                newQuantity = 1;
+            }
+
+            item.quantity = newQuantity;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart(); // Reload cart items
+        }
+
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart(); // Reload cart items
+        }
+
+        function clearCart() {
+            localStorage.removeItem('cart');
+            loadCart();
+        }
+
+        // Load cart items when page loads
+        window.onload = loadCart;
+    </script>
+</body>
+</html>

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Veg-entree - Coastal Curry & Grills</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Coastal Curry & Grills - Checkout">
+  <meta name="keywords" content="Checkout, Cart, Coastal Curry">
+  <meta name="author" content="Your Name">
+
+  <link rel="shortcut icon" href="images/CCG-logo.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .checkout-layout {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 5rem;
+    }
+
+    .cart-items,
+    .checkout-form {
+      flex: 1;
+      margin: 0.5rem;
+    }
+
+    .cart-items {
+      background-color: #ffffff00;
+      padding: 1rem;
+      border-radius: .25rem;
+      border: 1px solid #ffffff00;
+    }
+
+    .checkout-form {
+      background-color: #ffffff00;
+      color: white;
+      padding: 1rem;
+      border-radius: .25rem;
+      border: 1px solid #ddd;
+      font-size: 15px;
+    }
+
+    .checkout-item {
+      border: 1px solid #ffffff;
+      border-radius: .25rem;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      background-color: #00000047;
+      color: rgb(0, 0, 0);
+    }
+
+    .checkout-item img {
+      width: 70px;
+      border: 3px solid #ffffff;
+      height: 70px;
+      border-radius: 5px;
+      margin-right: 1rem;
+    }
+
+    .checkout-item-details {
+      flex: 1;
+    }
+
+    .checkout-item-actions {
+      text-align: right;
+      align-items: flex-start;
+      padding-bottom: 80px;
+      border-radius: 5px;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      margin-bottom: .5rem;
+    }
+
+    .quantity-control button {
+      border: none;
+      background: #545454;
+      color: white;
+    }
+
+    .quantity-control input {
+      width: 50px;
+      text-align: center;
+      margin: 0 .25rem;
+    }
+
+    #checkout-summary {
+      background-color: #333;
+      color: white;
+      padding: 1rem;
+      border-radius: .25rem;
+      margin-top: 1rem;
+    }
+
+    .checkout-form input,
+    .checkout-form select,
+    .checkout-form textarea {
+      background-color: #555;
+      border: 1px solid #777;
+      color: white;
+    }
+
+    .checkout-form label {
+      color: white;
+    }
+
+    .checkout-form button {
+      background-color: #5b5b5b;
+      border: none;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+      .checkout-layout {
+        flex-direction: column;
+      }
+
+      .cart-items,
+      .checkout-form {
+        margin: 0;
+        width: 100%;
+      }
+
+      .checkout-item img {
+        width: 80px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .checkout-item img {
+        width: 70px;
+      }
+
+      .checkout-form input,
+      .checkout-form select,
+      .checkout-form textarea {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+		<div class="container">
+			<a href="index.html">
+				<img src="images/logo-title-right.png" width="200px" alt="">
+			</a>
+		  <div>
+			<a href="cart.html" class="logo-display">
+-block d-lg-none">
+				<img src="images/cart-logo.png" width="25px" height="25px">
+			  </a>
+			  <button class="navbar-toggler" type="button" id="menu-toggle" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="oi oi-menu"></span>
+			  </button>
+		  </div>
+		  <div class="collapse navbar-collapse" id="ftco-nav">
+			<ul class="navbar-nav ml-auto" style="font-size: 18px;">
+			  <li class="nav-item"><a href="index.html" class="nav-link" style="font-size: 16px;">Home</a></li>
+			  <li class="nav-item"><a href="about.html" class="nav-link" style="font-size: 16px;">About</a></li>
+			  <li class="nav-item"><a href="menu.html" class="nav-link" style="font-size: 16px;">Menu</a></li>
+			  <li class="nav-item"><a href="contact.html" class="nav-link" style="font-size: 16px;">Contact</a></li>
+			  <li class="nav-item active"><a href="cart.html" class="nav-link"
+				  style="color: orange; font-size: 16px; border-radius: 5px;">
+				  <button class="btn btn-primary" style="border-radius: 5px;">Go to cart <i class="fas fa-shopping-cart"></i></button>
+				</a>
+			  </li>
+			</ul>
+		  </div>
+		</div>
+	</nav>
+
+  <script>
+    function addToCart(id, image, name, description, price) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      let existingItem = cart.find(item => item.id === id);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({ id, image, name, description, price, quantity: 1 });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Item added to cart');
+    }
+
+  </script>
+  <section class="food_section layout_padding-bottom">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <br>
+        <h2>
+          <a href="menu.html">Menu</a> / <a href="veg-entree.html"><span style="color: orange;">Veg
+              entree</span></a>
+        </h2>
+      </div>
+      <div class="filters-content">
+        <div class="row grid">
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/palak-paneer-recipe-featured.webp); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/palak-paneer-recipe-featured.webp" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Palak Paneer
+                  </h5>
+                  <p style="text-align: justify;">
+                    Creamy spinach curry with tender cubes of paneer, spiced to perfection.<br><br><br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$13.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item100', 'images/palak-paneer-recipe-featured.webp', 'Palak Paneer', 'Creamy spinach curry with tender cubes of paneer, spiced to perfection.', 13.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Kadai-Paneer-Recipe-6.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Kadai-Paneer-Recipe-6.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Kadai Paneer
+                  </h5>
+                  <p style="text-align: justify;">
+                    A spicy and flavorful paneer dish cooked with bell peppers, tomatoes, and aromatic spices in a
+                    traditional kadai.<br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$13.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item101', 'images/Kadai-Paneer-Recipe-6.jpg', 'Kadai Paneer', 'A spicy and flavorful paneer dish cooked with bell peppers, tomatoes, and aromatic spices in a traditional kadai.', 13.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/paneer-butter-masala.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/paneer-butter-masala.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Paneer Butter Masala
+                  </h5>
+                  <p style="text-align: justify;">
+                    Paneer Butter Masala is a rich, flavored with mild spices and a touch of cream.<br><br><br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$13.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item102', 'images/paneer-butter-masala.jpg', 'Paneer Butter Masala', 'Paneer Butter Masala is a rich, flavored with mild spices and a touch of cream.', 13.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/paneer\ tikka); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/paneer tikka" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Paneer Tikka Masala
+                  </h5>
+                  <p style="text-align: justify;">
+                    A hearty dish featuring tender paneer and potatoes cooked together in a spiced, flavorful
+                    gravy.<br><br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$13.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item103', 'images/achari-paneer-3.webp', 'Paneer Tikka Masala', 'A hearty dish featuring tender paneer and potatoes cooked together in a spiced, flavorful gravy.', 13.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Dal-Tadka-Recipe-Step-By-Step-Instructions.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Dal-Tadka-Recipe-Step-By-Step-Instructions.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Dhaal Tarka
+                  </h5>
+                  <p style="text-align: justify;">
+                    Dhaal Tarka is a flavorful lentil dish cooked with a blend of yellow lentils, tempered with aromatic
+                    spices, offering a comforting and wholesome meal. <br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$11.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item104', 'images/Dal-Tadka-Recipe-Step-By-Step-Instructions.jpg', 'Dhaal Tarka', 'Dhaal Tarka is a flavorful lentil dish cooked with a blend of yellow lentils, tempered with aromatic spices, garlic, and onions, offering a comforting and wholesome meal.', 11.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/makhani.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/makhani.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Dhaal Makhani
+                  </h5>
+                  <p style="text-align: justify;">
+                    Dhaal Makhani is a rich and creamy lentil dish made with black lentils, butter, and cream,
+                    slow-cooked with aromatic spices for a velvety and indulgent flavor.<br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$11.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item105', 'images/makhani.jpg', 'Dhaal Makhani', 'Dhaal Makhani is a rich and creamy lentil dish made with black lentils, butter, and cream, slow-cooked with aromatic spices for a velvety and indulgent flavor.', 11.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/chana-masala-fb809bc.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/chana-masala-fb809bc.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Channa Masala
+                  </h5>
+                  <p style="text-align: justify;">
+                    Channa Masala is a hearty and spicy dish made with tender chickpeas simmered in a rich tomato-based
+                    gravy, flavored with aromatic spices.<br><br><br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$11.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item106', 'images/chana-masala-fb809bc.jpg', 'Crispy Potato Wedges', 'Channa Masala is a hearty and spicy dish made with tender chickpeas simmered in a rich tomato-based gravy, flavored with aromatic spices.', 11.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/ZS-vegetable-korma-hblf-superJumbo.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/ZS-vegetable-korma-hblf-superJumbo.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Veg Korma
+                  </h5>
+                  <p style="text-align: justify;">
+                    Veg Korma is a rich and creamy curry made with a medley of mixed vegetables simmered in a flavorful,
+                    mildly spiced yogurt and coconut-based sauce.<br><br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$11.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item107', 'images/ZS-vegetable-korma-hblf-superJumbo.jpg', 'Veg Korma', 'Veg Korma is a rich and creamy curry made with a medley of mixed vegetables simmered in a flavorful, mildly spiced yogurt and coconut-based sauce.', 11.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Vegetable-Makhani-1.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Vegetable-Makhani-1.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Veg Makhanwala
+                  </h5>
+                  <p style="text-align: justify;">
+                    Veg Makhanwala is a creamy and buttery curry made with mixed vegetables simmered in a rich
+                    tomato-based gravy, infused with mild spices and a touch of cream, delivering a smooth and flavorful
+                    dish.<br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$11.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item108', 'images/Vegetable-Makhani-1.jpg', 'Veg Makhanwala', 'Veg Makhanwala is a creamy and buttery curry made with mixed vegetables simmered in a rich tomato-based gravy, infused with mild spices and a touch of cream, delivering a smooth and flavorful dish.', 11.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Indian-Aloo-Gobi-480x270.webp); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Indian-Aloo-Gobi-480x270.webp" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Aloo Gobi
+                  </h5>
+                  <p style="text-align: justify;">
+                    Aloo Gobi is a classic vegetarian dish made with tender potatoes and cauliflower, cooked with
+                    aromatic spices, turmeric, and herbs for a flavorful and comforting meal. <br> <br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$11.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item109', 'images/Indian-Aloo-Gobi-480x270.webp', 'Aloo Gobi', 'Aloo Gobi is a classic vegetarian dish made with tender potatoes and cauliflower, cooked with aromatic spices, turmeric, and herbs for a flavorful and comforting meal.', 11.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/matar-paneer.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/matar-paneer.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Matar Paneer
+                  </h5>
+                  <p style="text-align: justify;">
+                    Matar Paneer is a delicious curry made with soft paneer cubes and green peas, simmered in a rich
+                    tomato-based gravy with aromatic spices, offering a perfect blend of flavors.<br><br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$13.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item110', 'images/matar-paneer.jpg', 'Matar Paneer', 'Veg Makhanwala is a creamy and buttery curry made with mixed vegetables simmered in a rich tomato-based gravy, infused with mild spices and a touch of cream, delivering a smooth and flavorful dish.', 13.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+    </div>
+    </div>
+
+    </div>
+  </section>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+  <br>
+  <h2 style="text-align: center; text-decoration: underline; text-decoration-color: orange;">FOR MORE INFORMATION</h2>
+  <br><br>
+  <p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
+
+  <section class="ftco-appointment">
+    <div class="overlay"></div>
+    <div class="container-wrap">
+      <div class="row no-gutters d-md-flex align-items-center">
+        <div class="col-md-6 d-flex align-self-stretch">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d65283209.838314846!2d-115.75231848205992!3d2.9388747012262377!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x863f9c4a4ae4ff69%3A0x14d76754eff83861!2s1817%2061st%20St%2C%20Galveston%2C%20TX%2077551%2C%20USA!5e0!3m2!1sen!2sin!4v1726342723881!5m2!1sen!2sin"
+            width="600" height="519" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="col-md-6 appointment ftco-animate">
+          <h3 class="mb-3">Contact Us</h3>
+          <form action="#" class="appointment-form">
+            <div class="d-md-flex">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="First Name">
+              </div>
+            </div>
+            <div class="d-me-flex">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Last Name">
+              </div>
+            </div>
+            <div class="form-group">
+              <textarea name="" id="" cols="30" rows="3" class="form-control" placeholder="Message"></textarea>
+            </div>
+            <div class="form-group">
+              <input type="submit" value="Send" class="btn btn-primary py-3 px-4">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="ftco-footer ftco-section img">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 mb-5 mb-md-5 d-flex justify-content-center">
+          <img src="images/CCG-logo-bottom.png" width="120px" height="100px" alt="">
+        </div>
+
+
+        <div class="col-lg-3 col-md-6 mb-5 mb-md-5">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">About Us</h2>
+            <p style="text-align: justify;">At Coastal Curry & Grill, we bring the vibrant flavors of India straight to
+              your plate. Our menu is a celebration of India’s rich culinary heritage, carefully crafted with the finest
+              ingredients, traditional spices, and a passion for authentic Indian cuisine.</p>
+            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+              <a href="#"><img src="images/xlogo.png" width="40px" alt=""></a>
+              <a href="#"><img src="images/fb.png" width="40px" alt="" style="padding-left: 10px;"></a>
+              <a href="#"><img src="images/insta.png" width="50px" alt="" style="padding-left: 10px;"></a>
+              <a href=""><img src="images/WP.png" width="50px" style="padding-left: 10px;" alt=""></a>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6 mb-5 mb-md-5">
+          <div class="ftco-footer-widget mb-4 ml-md-4">
+            <h2 class="ftco-heading-2">Services</h2>
+            <ul class="list-unstyled">
+              <li><a href="index.html" class="py-2 d-block">Home</a></li>
+              <li><a href="about.html" class="py-2 d-block">About us</a></li>
+              <li><a href="menu.html" class="py-2 d-block">Menu</a></li>
+              <li><a href="contact.html" class="py-2 d-block">Contact us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-5 mb-md-5">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Have a Questions?</h2>
+            <div class="block-23 mb-3">
+              <ul>
+                <li><span class="icon icon-map-marker"></span><span class="text">Coastal Curry & Grills,<br> 1817, 61st
+                    St, <br>Galvastan, TX77551</span></li>
+                <li><a href="#"><span class="icon icon-phone"></span><span class="text">(409) 572-6463</span></a></li>
+                <li><a href="#"><span class="icon icon-envelope"></span><span class="text"
+                      style="padding-left: 5px;">support@coastalcurryandgril.com</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="text-align: center;">Copyright ©2024 All rights reserved - <a href="index.html"
+        style="color: orange; text-decoration: none;">Coastal Curry & Grills</a></p>
+
+  </footer>
+
+
+
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+        stroke="#F96D00" />
+    </svg></div>
+
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.easing.1.3.js"></script>
+  <script src="js/jquery.waypoints.min.js"></script>
+  <script src="js/jquery.stellar.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/jquery.magnific-popup.min.js"></script>
+  <script src="js/aos.js"></script>
+  <script src="js/jquery.animateNumber.min.js"></script>
+  <script src="js/bootstrap-datepicker.js"></script>
+  <script src="js/jquery.timepicker.min.js"></script>
+  <script src="js/scrollax.min.js"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="js/google-map.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>

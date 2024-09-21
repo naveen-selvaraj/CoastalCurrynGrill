@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Non-veg-entree - Coastal Curry & Grills</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Coastal Curry & Grills - Checkout">
+  <meta name="keywords" content="Checkout, Cart, Coastal Curry">
+  <meta name="author" content="Your Name">
+
+  <link rel="shortcut icon" href="images/CCG-logo.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .checkout-layout {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 5rem;
+    }
+
+    .cart-items,
+    .checkout-form {
+      flex: 1;
+      margin: 0.5rem;
+    }
+
+    .cart-items {
+      background-color: #ffffff00;
+      padding: 1rem;
+      border-radius: .25rem;
+      border: 1px solid #ffffff00;
+    }
+
+    .checkout-form {
+      background-color: #ffffff00;
+      color: white;
+      padding: 1rem;
+      border-radius: .25rem;
+      border: 1px solid #ddd;
+      font-size: 15px;
+    }
+
+    .checkout-item {
+      border: 1px solid #ffffff;
+      border-radius: .25rem;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      background-color: #00000047;
+      color: rgb(0, 0, 0);
+    }
+
+    .checkout-item img {
+      width: 70px;
+      border: 3px solid #ffffff;
+      height: 70px;
+      border-radius: 5px;
+      margin-right: 1rem;
+    }
+
+    .checkout-item-details {
+      flex: 1;
+    }
+
+    .checkout-item-actions {
+      text-align: right;
+      align-items: flex-start;
+      padding-bottom: 80px;
+      border-radius: 5px;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      margin-bottom: .5rem;
+    }
+
+    .quantity-control button {
+      border: none;
+      background: #545454;
+      color: white;
+    }
+
+    .quantity-control input {
+      width: 50px;
+      text-align: center;
+      margin: 0 .25rem;
+    }
+
+    #checkout-summary {
+      background-color: #333;
+      color: white;
+      padding: 1rem;
+      border-radius: .25rem;
+      margin-top: 1rem;
+    }
+
+    .checkout-form input,
+    .checkout-form select,
+    .checkout-form textarea {
+      background-color: #555;
+      border: 1px solid #777;
+      color: white;
+    }
+
+    .checkout-form label {
+      color: white;
+    }
+
+    .checkout-form button {
+      background-color: #5b5b5b;
+      border: none;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+      .checkout-layout {
+        flex-direction: column;
+      }
+
+      .cart-items,
+      .checkout-form {
+        margin: 0;
+        width: 100%;
+      }
+
+      .checkout-item img {
+        width: 80px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .checkout-item img {
+        width: 70px;
+      }
+
+      .checkout-form input,
+      .checkout-form select,
+      .checkout-form textarea {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+		<div class="container">
+			<a href="index.html">
+				<img src="images/logo-title-right.png" width="200px" alt="">
+			</a>
+		  <div>
+			<a href="cart.html" class="logo-display">
+
+				<img src="images/cart-logo.png" width="25px" height="25px">
+			  </a>
+			  <button class="navbar-toggler" type="button" id="menu-toggle" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="oi oi-menu"></span>
+			  </button>
+		  </div>
+		  <div class="collapse navbar-collapse" id="ftco-nav">
+			<ul class="navbar-nav ml-auto" style="font-size: 18px;">
+			  <li class="nav-item"><a href="index.html" class="nav-link" style="font-size: 16px;">Home</a></li>
+			  <li class="nav-item"><a href="about.html" class="nav-link" style="font-size: 16px;">About</a></li>
+			  <li class="nav-item"><a href="menu.html" class="nav-link" style="font-size: 16px;">Menu</a></li>
+			  <li class="nav-item"><a href="contact.html" class="nav-link" style="font-size: 16px;">Contact</a></li>
+			  <li class="nav-item active"><a href="cart.html" class="nav-link"
+				  style="color: orange; font-size: 16px; border-radius: 5px;">
+				  <button class="btn btn-primary" style="border-radius: 5px;">Go to cart <i class="fas fa-shopping-cart"></i></button>
+				</a>
+			  </li>
+			</ul>
+		  </div>
+		</div>
+	</nav>
+
+  <script>
+    function addToCart(id, image, name, description, price) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      let existingItem = cart.find(item => item.id === id);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({ id, image, name, description, price, quantity: 1 });
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Item added to cart');
+    }
+
+  </script>
+  <section class="food_section layout_padding-bottom">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <br>
+        <h2>
+          <a href="menu.html">Menu</a> / <a href="nonveg-entree.html"><span style="color: orange;">Non veg
+              entree</span></a>
+        </h2>
+      </div>
+      <div class="filters-content">
+        <div class="row grid">
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/ip-coconut-chicken-curry-square-1-480x270.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/ip-coconut-chicken-curry-square-1-480x270.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Coastal Chicken Curry
+                  </h5>
+                  <p style="text-align: justify;">
+                    Coastal Chicken Curry is a flavorful dish featuring tender chicken cooked, curry leaves, and a hint
+                    of indian assorted flavours<br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$14.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item200', 'images/ip-coconut-chicken-curry-square-1-480x270.jpg', 'Coastal Chicken Curry', 'Coastal Chicken Curry is a flavorful dish featuring tender chicken cooked in a coconut-based gravy infused with coastal spices, curry leaves, and a hint of tamarind, delivering a rich and aromatic experience.', 14.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Kadai-Chicken.png); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Kadai-Chicken.png" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Kadai Chicken
+                  </h5>
+                  <p style="text-align: justify;">
+                    Spicy chicken cooked with bell peppers, onions, and a fragrant blend of Indian spices.<br>
+                    <br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$14.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item201', 'images/Kadai-Chicken.png', 'Kadai Chicken', 'Spicy chicken cooked with bell peppers, onions, and a fragrant blend of Indian spices.', 14.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/butter-chicken-recipe.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/butter-chicken-recipe.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Butter Chicken
+                  </h5>
+                  <p style="text-align: justify;">
+                    Tender chicken simmered in a rich, creamy tomato sauce with buttery flavors and a blend of aromatic
+                    spices.<br><br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$14.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item202', 'images/butter-chicken-recipe.jpg', 'Butter Chicken', 'Tender chicken simmered in a rich, creamy tomato sauce with buttery flavors and a blend of aromatic spices', 14.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/chicken-tikka-masala.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/chicken-tikka-masala.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Chicken Tikka Masala
+                  </h5>
+                  <p style="text-align: justify;">
+                    A hearty dish featuring tender chicken with onion and cooked together in a spiced, flavorful
+                    gravy.<br><br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$13.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item203', 'images/chicken-tikka-masala.jpg', 'Chicken Tikka Masala', 'A hearty dish featuring tender chicken and potatoes cooked together in a spiced, flavorful gravy.', 13.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/chicken-saagwala-with-spinach-1957402-hero-01-19aac800e82e48e0978b12b2667390f6.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/chicken-saagwala-with-spinach-1957402-hero-01-19aac800e82e48e0978b12b2667390f6.jpg"
+                    alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Murg Saagwala
+                  </h5>
+                  <p style="text-align: justify;">
+                    Murg Saagwala is a hearty chicken curry cooked with tender spinach leaves and aromatic spices,
+                    offering a perfect blend of rich.<br>
+                  </p>
+                  <div class="options">
+                    <p> Price: <span class="price" style="color: orange;">$14.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item204', 'images/chicken-saagwala-with-spinach-1957402-hero-01-19aac800e82e48e0978b12b2667390f6.jpg', 'Murg saagwala', 'Murg Saagwala is a hearty chicken curry cooked with tender spinach leaves and aromatic spices, offering a perfect blend of rich, earthy flavors in a creamy, nutritious gravy.', 14.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/The_Royal_Dil_Chicken_do_Pyaza_j7ulzt.webp); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/The_Royal_Dil_Chicken_do_Pyaza_j7ulzt.webp" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Murg do payaza
+                  </h5>
+                  <p style="text-align: justify;">
+                    Murg Do Payaza is a flavorful chicken dish cooked with a generous amount of onions, both fried and
+                    raw, simmered in a spiced gravy<br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$14.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item205', 'images/The_Royal_Dil_Chicken_do_Pyaza_j7ulzt.webp', 'Murg do payaza', 'Murg Do Payaza is a flavorful chicken dish cooked with a generous amount of onions, both fried and raw, simmered in a spiced gravy that enhances its rich taste and aroma.', 14.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/madras.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/madras.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Madras Chicken Curry
+                  </h5>
+                  <p style="text-align: justify;">
+                    Madras Chicken Curry is a spicy and aromatic dish featuring tender chicken and coconut-based
+                    simmered in a robust delivering a fiery and flavorful experience.<br><br><br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$14.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item206', 'images/madras.jpg', 'Madras Chicken Curry', 'Madras Chicken Curry is a spicy and aromatic dish featuring tender chicken simmered in a robust delivering a fiery and flavorful experience.', 14.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Chicken-Korma.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Chicken-Korma.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Chicken Korma
+                  </h5>
+                  <p style="text-align: justify;">
+                    Chicken Korma is a rich and creamy curry made with a medley of mixed vegetables na chicken simmered
+                    in a flavorful, mildly spiced yogurt and coconut-based sauce.<br><br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$14.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item107', 'images/ZS-vegetable-korma-hblf-superJumbo.jpg', 'Chicken Korma', 'Chicken Korma is a rich and creamy curry made with a medley of mixed vegetables and chicken simmered in a flavorful, mildly spiced yogurt and coconut-based sauce.', 14.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/dhansak.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/dhansak.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Chicken Dhansak
+                  </h5>
+                  <p style="text-align: justify;">
+                    Chicken Dhansak is a delicious Parsi dish featuring tender chicken cooked with lentils, vegetables,
+                    and a blend of spices, creating a rich and hearty curry with a hint of sweetness and tang.
+                    <br><br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$14.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item208', 'images/dhansak.jpg', 'Chicken Dhansak', 'Chicken Dhansak is a delicious Parsi dish featuring tender chicken cooked with lentils, vegetables, and a blend of spices, creating a rich and hearty curry with a hint of sweetness and tang.', 14.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Chicken-VindalooDSC_6147.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Chicken-VindalooDSC_6147.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Chicken Vindaloo
+                  </h5>
+                  <p style="text-align: justify;">
+                    Chicken Vindaloo is a spicy and tangy curry originating from Goa, made with marinated chicken,
+                    vinegar, garlic, potato and a blend of aromatic spices, delivering a bold and flavorful dish with a
+                    kick.<br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$14.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item209', 'images/Chicken-VindalooDSC_6147.jpg', 'Chicken Vindaloo', 'Chicken Vindaloo is a spicy and tangy curry originating from Goa, made with marinated chicken, vinegar, garlic, and a blend of aromatic spices, delivering a bold and flavorful dish with a kick.', 14.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/GoatCurry1.webp); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/GoatCurry1.webp" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Coastal Goat Curry
+                  </h5>
+                  <p style="text-align: justify;">
+                    Coastal Goat Curry is a rich and flavorful dish featuring tender goat meat cooked in a coconut-based
+                    gravy with a blend of coastal spices, curry leaves, and aromatic herbs, offering a delightful taste
+                    of the sea and land.<br>
+                  </p>
+                  <div class="options">
+                    <p> Price: <span class="price" style="color: orange;">$16.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item210', 'images/GoatCurry1.webp', 'Coastal Goat Curry', 'Coastal Goat Curry is a rich and flavorful dish featuring tender goat meat cooked in a coconut-based gravy with a blend of coastal spices, curry leaves, and aromatic herbs, offering a delightful taste of the sea and land.', 16.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/kadai-goat.webp); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/kadai-goat.webp" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Kadai Goat
+                  </h5>
+                  <p style="text-align: justify;">
+                    Kadai Goat is a hearty curry made with tender goat pieces cooked in a spicy and aromatic masala,
+                    featuring bell peppers, onions, and a blend of traditional spices, delivering a robust and flavorful
+                    dish.<br> 
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$16.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item211', 'images/kadai-goat.webp', 'Kadai Goat', 'Kadai Goat is a hearty curry made with tender goat pieces cooked in a spicy and aromatic masala, featuring bell peppers, onions, and a blend of traditional spices, delivering a robust and flavorful dish.', 16.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Goat\ dhasak.webp); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Goat dhasak.webp" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Goat Dhansak
+                  </h5>
+                  <p style="text-align: justify;">
+                    Goat Dhansak is a flavorful Parsi dish made with tender goat meat cooked with lentils and a mix of
+                    spices, creating a hearty curry that balances sweetness and tang for a comforting meal.<br> 
+                  </p>
+                  <div class="options">
+                    <p>Price:
+                      <span class="price" style="color: orange;">$16.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item212', 'images/Goat dhasak.webp', 'Goat Dhansak', 'Goat Dhansak is a flavorful Parsi dish made with tender goat meat cooked with lentils and a mix of spices, creating a hearty curry that balances sweetness and tang for a comforting meal.', 16.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/goat\ korma.webp); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/goat korma.webp" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Goat Korma
+                  </h5>
+                  <p style="text-align: justify;">
+                    Goat Korma is a rich and creamy curry made with tender goat meat simmered in a fragrant yogurt and
+                    nut-based sauce, enhanced with aromatic spices for a flavorful and indulgent dish.<br> 
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$16.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item213', 'images/goat korma.webp', ' Goat Korma', 'Goat Korma is a rich and creamy curry made with tender goat meat simmered in a fragrant yogurt and nut-based sauce, enhanced with aromatic spices for a flavorful and indulgent dish.', 16.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Madras\ goat\ curry.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Madras goat curry.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Madras Goat Curry
+                  </h5>
+                  <p style="text-align: justify;">
+                    Madras Goat Curry is a spicy and aromatic dish featuring tender goat meat cooked in a robust
+                    coconut-based sauce with a blend of South Indian spices, delivering a fiery<br> 
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$16.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item214', 'images/Madras goat curry.jpg', 'Madras Goat Curry', 'Madras Goat Curry is a spicy and aromatic dish featuring tender goat meat cooked in a robust coconut-based sauce with a blend of South Indian spices, delivering a fiery and flavorful experience.', 16.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Madras\ goat\ curry.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Madras goat curry.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Saagu Goat
+                  </h5>
+                  <p style="text-align: justify;">
+                    Saagu Goat is a delicious and aromatic curry made with tender goat meat cooked in a rich, spiced
+                    gravy featuring a blend of coconut and mixed vegetables, offering a comforting and flavorful
+                    experience.<br> 
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$16.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item215', 'images/Madras goat curry.jpg', 'Saagu Goat', 'Saagu Goat is a delicious and aromatic curry made with tender goat meat cooked in a rich, spiced gravy featuring a blend of coconut and mixed vegetables, offering a comforting and flavorful experience.', 16.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Goat\ vindaloo.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Goat vindaloo.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Goat Vindaloo
+                  </h5>
+                  <p style="text-align: justify;">
+                    Goat Vindaloo is a fiery and tangy curry made with marinated goat meat, vinegar, potato and a robust
+                    blend of spices, delivering a bold and flavorful dish that packs a punch.<br> <br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$16.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item216', 'images/Goat vindaloo.jpg', 'Goat Vindaloo', 'Goat Vindaloo is a fiery and tangy curry made with marinated goat meat, vinegar, and a robust blend of spices, delivering a bold and flavorful dish that packs a punch.', 16.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/coastal-fish-curry.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/coastal-fish-curry.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Coastal Fish Curry
+                  </h5>
+                  <p style="text-align: justify;">
+                    Coastal Fish Curry is a flavorful dish featuring fresh fish cooked in a tangy coconut-based gravy,
+                    enriched with coastal spices, tamarind, and curry leaves, delivering a delightful taste of the
+                    sea.<br> 
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$15.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item217', 'images/coastal-fish-curry.jpg', 'Coastal Fish Curry', 'Coastal Fish Curry is a flavorful dish featuring fresh fish cooked in a tangy coconut-based gravy, enriched with coastal spices, tamarind, and curry leaves, delivering a delightful taste of the sea.', 15.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Goan\ fish\ curry.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Goan fish curry.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Goan Fish Curry
+                  </h5>
+                  <p style="text-align: justify;">
+                    Goan Fish Curry is a vibrant dish made with fresh fish simmered in a tangy coconut milk sauce,
+                    flavored with tamarind and a blend of aromatic spices, creating a delicious and zesty coastal
+                    experience.<br>
+                  </p>
+                  <div class="options">
+                    <p> Price: <span class="price" style="color: orange;">$15.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item218', 'images/Goan fish curry.jpg', 'Goan Fish Curry', 'Goan Fish Curry is a vibrant dish made with fresh fish simmered in a tangy coconut milk sauce, flavored with tamarind and a blend of aromatic spices, creating a delicious and zesty coastal experience.', 15.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Coastal\ shrimp\ curry.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Coastal shrimp curry.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Coastal Shrimp Curry
+                  </h5>
+                  <p style="text-align: justify;">
+                    Coastal Shrimp Curry is a rich and aromatic dish featuring succulent shrimp cooked in a creamy
+                    coconut-based sauce, infused with spices and herbs typical of coastal cuisine, delivering a
+                    delightful burst of flavor.<br> 
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$16.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item219', 'images/Coastal shrimp curry.jpg', 'Coastal Shrimp Curry', 'Coastal Shrimp Curry is a rich and aromatic dish featuring succulent shrimp cooked in a creamy coconut-based sauce, infused with spices and herbs typical of coastal cuisine, delivering a delightful burst of flavor.', 16.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/kadai\ shrimps.jpg); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/kadai shrimps.jpg" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Kadai Shrimp
+                  </h5>
+                  <p style="text-align: justify;">
+                    Kadai Shrimp is a spicy and flavorful dish made with succulent shrimp cooked in a wok-like kadai
+                    with bell peppers, onions, and a blend of aromatic spices, creating a vibrant and hearty curry.<br>
+                  </p>
+                  <div class="options">
+                    <p> Price: <span class="price" style="color: orange;">$16.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item220', 'images/kadai shrimps.jpg', 'Kadai Shrimp', 'Kadai Shrimp is a spicy and flavorful dish made with succulent shrimp cooked in a wok-like kadai with bell peppers, onions, and a blend of aromatic spices, creating a vibrant and hearty curry.', 16.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/Madras\ Shrimp\ curry.webp); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/Madras Shrimp curry.webp" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Madras Shrimp Curry
+                  </h5>
+                  <p style="text-align: justify;">
+                    Madras Shrimp Curry is a spicy and aromatic dish featuring fresh shrimp cooked in a robust
+                    coconut-based sauce, infused with tangy tamarind. <br><br><br>
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$16.99</span></p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item221', 'images/Madras Shrimp curry.webp', 'Madras Shrimp Curry', 'KMadras Shrimp Curry is a spicy and aromatic dish featuring fresh shrimp cooked in a robust coconut-based sauce, infused with tangy tamarind and a blend of South Indian spices, delivering a bold and flavorful experience.', 16.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4 all pizza">
+            <div class="box">
+              <div>
+                <div class="img-box"
+                  style="background-image: url(images/shrimp\ vindaloo.webp); background-size: cover; background-color:rgb(43, 43, 43);">
+                  <img src="images/shrimp vindaloo.webp" alt="">
+                </div>
+                <div class="detail-box" style="background-color: rgb(43, 43, 43);">
+                  <h5>
+                    Shrimp Vindaloo
+                  </h5>
+                  <p style="text-align: justify;">
+                    Shrimp Vindaloo is a fiery and tangy curry made with succulent shrimp marinated in vinegar, potato
+                    and a blend of spices, creating a bold and flavorful dish that captures the essence of Goan
+                    cuisine.<br> 
+                  </p>
+                  <div class="options">
+                    <p>Price: <span class="price" style="color: orange;">$16.99</span>ß</p>
+                    <button class="ml-2 btn btn-warning btn-sm add-to-cart"
+                      onclick="addToCart('item222', 'images/shrimp vindaloo.webp', ' Shrimp Vindaloo', 'Shrimp Vindaloo is a fiery and tangy curry made with succulent shrimp marinated in vinegar and a blend of spices, creating a bold and flavorful dish that captures the essence of Goan cuisine.', 16.99)">Add
+                      to Cart</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+    </div>
+    </div>
+
+    </div>
+  </section>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+  <br>
+  <h2 style="text-align: center; text-decoration: underline; text-decoration-color: orange;">FOR MORE INFORMATION</h2>
+  <br><br>
+  <p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
+
+  <section class="ftco-appointment">
+    <div class="overlay"></div>
+    <div class="container-wrap">
+      <div class="row no-gutters d-md-flex align-items-center">
+        <div class="col-md-6 d-flex align-self-stretch">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d65283209.838314846!2d-115.75231848205992!3d2.9388747012262377!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x863f9c4a4ae4ff69%3A0x14d76754eff83861!2s1817%2061st%20St%2C%20Galveston%2C%20TX%2077551%2C%20USA!5e0!3m2!1sen!2sin!4v1726342723881!5m2!1sen!2sin"
+            width="600" height="519" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="col-md-6 appointment ftco-animate">
+          <h3 class="mb-3">Contact Us</h3>
+          <form action="#" class="appointment-form">
+            <div class="d-md-flex">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="First Name">
+              </div>
+            </div>
+            <div class="d-me-flex">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Last Name">
+              </div>
+            </div>
+            <div class="form-group">
+              <textarea name="" id="" cols="30" rows="3" class="form-control" placeholder="Message"></textarea>
+            </div>
+            <div class="form-group">
+              <input type="submit" value="Send" class="btn btn-primary py-3 px-4">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="ftco-footer ftco-section img">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 mb-5 mb-md-5 d-flex justify-content-center">
+          <img src="images/CCG-logo-bottom.png" width="120px" height="100px" alt="">
+        </div>
+
+
+        <div class="col-lg-3 col-md-6 mb-5 mb-md-5">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">About Us</h2>
+            <p style="text-align: justify;">At Coastal Curry & Grill, we bring the vibrant flavors of India straight to
+              your plate. Our menu is a celebration of India’s rich culinary heritage, carefully crafted with the finest
+              ingredients, traditional spices, and a passion for authentic Indian cuisine.</p>
+            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+              <a href="#"><img src="images/xlogo.png" width="40px" alt=""></a>
+              <a href="#"><img src="images/fb.png" width="40px" alt="" style="padding-left: 10px;"></a>
+              <a href="#"><img src="images/insta.png" width="50px" alt="" style="padding-left: 10px;"></a>
+              <a href=""><img src="images/WP.png" width="50px" style="padding-left: 10px;" alt=""></a>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6 mb-5 mb-md-5">
+          <div class="ftco-footer-widget mb-4 ml-md-4">
+            <h2 class="ftco-heading-2">Services</h2>
+            <ul class="list-unstyled">
+              <li><a href="index.html" class="py-2 d-block">Home</a></li>
+              <li><a href="about.html" class="py-2 d-block">About us</a></li>
+              <li><a href="menu.html" class="py-2 d-block">Menu</a></li>
+              <li><a href="contact.html" class="py-2 d-block">Contact us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-5 mb-md-5">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Have a Questions?</h2>
+            <div class="block-23 mb-3">
+              <ul>
+                <li><span class="icon icon-map-marker"></span><span class="text">Coastal Curry & Grills,<br> 1817, 61st
+                    St, <br>Galvastan, TX77551</span></li>
+                <li><a href="#"><span class="icon icon-phone"></span><span class="text">(409) 572-6463</span></a></li>
+                <li><a href="#"><span class="icon icon-envelope"></span><span class="text"
+                      style="padding-left: 5px;">support@coastalcurryandgril.com</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="text-align: center;">Copyright ©2024 All rights reserved - <a href="index.html"
+        style="color: orange; text-decoration: none;">Coastal Curry & Grills</a></p>
+
+  </footer>
+
+
+
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px">
+      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+        stroke="#F96D00" />
+    </svg></div>
+
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.easing.1.3.js"></script>
+  <script src="js/jquery.waypoints.min.js"></script>
+  <script src="js/jquery.stellar.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/jquery.magnific-popup.min.js"></script>
+  <script src="js/aos.js"></script>
+  <script src="js/jquery.animateNumber.min.js"></script>
+  <script src="js/bootstrap-datepicker.js"></script>
+  <script src="js/jquery.timepicker.min.js"></script>
+  <script src="js/scrollax.min.js"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="js/google-map.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>

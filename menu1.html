@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .pricing-entry {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .pricing-entry .img {
+            width: 100px;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+        }
+        .pricing-entry .desc {
+            padding-left: 1rem;
+        }
+        .pricing-entry .desc .price {
+            color: orange;
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Restaurant Menu</h2>
+        <div class="row">
+            <!-- Menu Item 1 -->
+            <div class="col-md-12">
+                <div class="pricing-entry d-flex" id="item1">
+                    <div class="img" style="background-image: url('images/Croissant-min.webp');"></div>
+                    <div class="desc pl-3">
+                        <div class="d-flex text align-items-center">
+                            <h3><span>Croissant Plain</span></h3>
+                            <button class="ml-2 btn btn-warning btn-sm add-to-cart" onclick="addToCart('item1', 'images/Croissant-min.webp', 'Croissant Plain', 'Delight in the simplicity of our Plain Croissant', 20)">Add to Cart</button>
+                        </div>
+                        <div class="d-block">
+                            <p style="font-size: 14px;">Delight in the simplicity of our Plain Croissant</p>
+                            <span class="price">$20.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Repeat for other menu items -->
+        </div>
+
+        <a href="cart.html" class="btn btn-success mt-3">Go to Cart</a>
+    </div>
+
+    <script>
+        function addToCart(id, image, name, description, price) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ id, image, name, description, price, quantity: 1 });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+    </script>
+</body>
+</html>
